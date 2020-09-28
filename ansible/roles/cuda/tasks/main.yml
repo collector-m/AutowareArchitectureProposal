@@ -1,3 +1,4 @@
+---
 - name: CUDA (add nvidia key)
   become: yes
   apt_key:

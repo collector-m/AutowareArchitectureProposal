@@ -14,7 +14,7 @@
 
 - name: ROS (install packages)
   apt:
-    name: "ros-{{ release }}-{{ package }}"
+    name: "ros-{{ rosdistro }}-{{ package }}"
     state: latest
     update_cache: yes
   become: yes
@@ -43,17 +43,19 @@
 - name: ROS (add path >> bashrc)
   lineinfile:
     dest: ~/.bashrc
-    line: source /opt/ros/{{ release }}/setup.bash
+    line: source /opt/ros/{{ rosdistro }}/setup.bash
     state: present
   become: no
 
 - name: ROS (install dependencies for building packages)
   apt:
     name:
-      - "ros-{{ release }}-velodyne-pointcloud"
-      - "ros-{{ release }}-roswww"
-      - "ros-{{ release }}-rosbridge-server"
+      - "ros-{{ rosdistro }}-velodyne-pointcloud"
+      - "ros-{{ rosdistro }}-roswww"
+      - "ros-{{ rosdistro }}-rosbridge-server"
       - build-essential
+      - python3-colcon-common-extensions
+      - python3-vcstool
     state: latest
     update_cache: yes
   become: yes

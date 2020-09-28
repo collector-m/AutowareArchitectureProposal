@@ -11,15 +11,21 @@ fi
 read -p ">  Do you run setup? This will take a while. [y/N] " answer
 
 if [[ $answer = [cC] ]]; then
-  sudo apt install -y cowsay
+  if !(command -v cowsay  > /dev/null 2>&1); then
+    sudo apt install -y cowsay
+  fi
+
   export answer=y
 fi
 
 case $answer in
   [yY]* )
-    sudo apt install -y ansible
+    if !(command -v ansible-playbook  > /dev/null 2>&1); then
+      sudo apt install -y ansible
+    fi
+
     cd $SCRIPT_DIR/ansible
-    ansible-playbook -i localhost, $SCRIPT_DIR/ansible/localhost-setup-ubuntu18.04-devpc.yml -i $SCRIPT_DIR/inventories/local-dev.ini -e AUTOWARE_DIR=$SCRIPT_DIR
+    ansible-playbook -i localhost, $SCRIPT_DIR/ansible/localhost-setup-ubuntu18.04-devpc.yml -i $SCRIPT_DIR/inventories/local-dev.ini -e AUTOWARE_DIR=$SCRIPT_DIR --ask-become-pass
     echo -e "\e[32mComplete \e[0m"
     ;;
   * )
